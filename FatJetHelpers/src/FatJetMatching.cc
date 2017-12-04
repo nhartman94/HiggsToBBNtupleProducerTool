@@ -255,7 +255,7 @@ std::pair<FatJetMatching::FatJetFlavor, const reco::GenParticle*> FatJetMatching
         }
         if (dr_zdaus < genRadius && dr_jet_z < genRadius) return std::make_pair(FatJetFlavor::Z, z);
       }
-    }else if (pdgid == ParticleID::p_h0) {
+    }else if (pdgid == ParticleID::p_h0 || pdgid ==ParticleID::p_Phi) {
       // Higgs
       auto h = getFinal(gp);
       if (isHadronic(h)) {
@@ -324,7 +324,7 @@ std::pair<FatJetMatching::FatJetLabel, const reco::GenParticle*> FatJetMatching:
       if (result.first != FatJetLabel::Invalid){
         return result;
       }
-    }else if (pdgid == ParticleID::p_h0) {
+    }else if (pdgid == ParticleID::p_h0 || pdgid ==ParticleID::p_Phi) {
       auto result = higgs_label(jet, gp, distR);
       if (result.first != FatJetLabel::Invalid){
         return result;
