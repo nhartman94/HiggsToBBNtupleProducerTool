@@ -65,6 +65,9 @@ def _run(jobid):
 
 
 n_threads = int(multiprocessing.cpu_count() / 2)
+print "n_threads =", n_threads
+n_threads = 2
+print "n_threads =", n_threads
 pool = multiprocessing.Pool(n_threads)
 results = pool.map(_run, listtoberun)
 

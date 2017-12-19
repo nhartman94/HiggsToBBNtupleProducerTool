@@ -54,6 +54,13 @@ TString prependXRootD(const TString& path){
         newpath=append+newpath;
         return newpath;
     }
+    else if(full_path.BeginsWith("/eos/uscms/")){
+        TString append="root://cmseos.fnal.gov//";
+        TString s_remove="/eos/uscms/";
+        TString newpath (full_path(s_remove.Length(),full_path.Length()));
+        newpath=append+newpath;
+        return newpath;
+    }
     return path;
 }
 
