@@ -50,5 +50,5 @@ mergeSamples.py [events per output file] [output dir] [path to the filelist prod
 ```
 e.g.,
 ```
-mergeSamples.py 100000 /eos/cms/store/user/$USER/DeepNtuples/output_dir/merged /eos/cms/store/user/$USER/DeepNtuples/output_dir/*/train_val_samples.txt
+mergeSamples.py 200000 /eos/uscms/store/group/lpchbb/deepdoubleb/phi_all /eos/uscms/store/group/lpchbb/20170717_ak8/QCD_Pt/qcd_*.txt /eos/uscms/store/group/lpchbb/20170717_ak8/BulkGrav/hbb_*.txt /eos/uscms/store/group/lpchbb/20170717_ak8/Phi/scalarpseudo_*.txt
 ``` 
