@@ -27,8 +27,8 @@ class TreeWriter;
 class NtupleBase {
 public:
   NtupleBase() {}
-  NtupleBase(std::string branchName, double jetR) :
-    branchName_(branchName), jetR_(jetR), data(branchName_) {}
+ NtupleBase(std::string branchName, double jetR, double minPt=-1) :
+  branchName_(branchName), jetR_(jetR), minPt_(minPt), data(branchName_) {}
   virtual ~NtupleBase() {}
 
   // set read mode
@@ -64,6 +64,7 @@ protected:
 protected:
   std::string branchName_;
   double jetR_ = -1;
+  double minPt_ = -1;
   TreeData data;
 
 };

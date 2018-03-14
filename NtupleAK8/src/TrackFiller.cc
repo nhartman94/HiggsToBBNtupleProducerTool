@@ -97,6 +97,7 @@ bool TrackFiller::fill(const pat::Jet& jet, size_t jetidx, const JetHelper& jet_
   std::vector<const pat::PackedCandidate*> chargedPFCands;
   std::unordered_map<const pat::PackedCandidate*, TrackInfoBuilder> trackInfoMap;
   for (const auto * pfcand : jet_helper.getJetConstituents()){
+    if (pfcand->pt() < minPt_) continue;
     if (pfcand->charge() != 0) {
       chargedPFCands.push_back(pfcand);
       trackInfoMap[pfcand];

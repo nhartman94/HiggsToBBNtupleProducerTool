@@ -16,8 +16,8 @@ namespace deepntuples {
 
 class TrackFiller: public NtupleBase {
 public:
-  TrackFiller() : TrackFiller("", 0.8) {}
-  TrackFiller(std::string branchName, double jetR=0.8) : NtupleBase(branchName, jetR) {}
+  TrackFiller() : TrackFiller("", 0.8, -1) {}
+  TrackFiller(std::string branchName, double jetR=0.8, double minPt=-1) : NtupleBase(branchName, jetR, minPt) {}
   virtual ~TrackFiller() {}
 
   // get input parameters from the cfg file

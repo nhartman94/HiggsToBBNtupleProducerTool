@@ -15,7 +15,7 @@ void TrackInfoBuilder::buildTrackInfo(const edm::ESHandle<TransientTrackBuilder>
 
   math::XYZVector jetDir = jet.momentum().Unit();
   GlobalVector jetXYZVector(jet.px(),jet.py(),jet.pz());
-
+  //std::cout << "pv = " << pv.x() << pv.y() << pv.z() << std::endl;
   const auto &trk = pfcand.pseudoTrack();
   reco::TransientTrack transientTrack(builder->build(trk));
   Measurement1D meas_ip2d = IPTools::signedTransverseImpactParameter(transientTrack, jetXYZVector, pv).second;
@@ -29,17 +29,19 @@ void TrackInfoBuilder::buildTrackInfo(const edm::ESHandle<TransientTrackBuilder>
 
   trackMomentum_ = catchInfs(trackMag);
   trackEta_ = catchInfs(trackMom.Eta());
-  trackEtaRel_ = catchInfs(reco::btau::etaRel(jetDir, trackMom));
-  trackPtRel_ = catchInfs(trackMom3.Perp(jetDir3));
-  trackPPar_ = catchInfs(jetDir.Dot(trackMom));
-  trackDeltaR_ = catchInfs(reco::deltaR(trackMom, jetDir));
+  trackEtaRel_ = catchInfsAndBound(reco::btau::etaRel(jetDir, trackMom),0,-5,15);
+  //std::cout <<"jetDir = " << jetDir.x() << "," << jetDir.y() << "," << jetDir.z() << std::endl;
+  //std::cout <<"trackEtaRel_ = " << trackEtaRel_ << std::endl;
+  trackPtRel_ = catchInfsAndBound(trackMom3.Perp(jetDir3),0,-1,4);
+  trackPPar_ = catchInfsAndBound(jetDir.Dot(trackMom),0,-1e5,1e5);
+  trackDeltaR_ = catchInfsAndBound(reco::deltaR(trackMom, jetDir),0,-5,5);
   trackPtRatio_ = catchInfs(trackMom3.Perp(jetDir3) / trackMag);
-  trackPParRatio_ = catchInfs(jetDir.Dot(trackMom) / trackMag);
-  trackSip2dVal_ = catchInfs(meas_ip2d.value());
-  trackSip2dSig_ = catchInfs(meas_ip2d.significance());
-  trackSip3dVal_ = catchInfs(meas_ip3d.value());
-  trackSip3dSig_ = catchInfs(meas_ip3d.significance());
-  trackJetDistVal_ = catchInfs(jetdist.value());
+  trackPParRatio_ = catchInfsAndBound(jetDir.Dot(trackMom) / trackMag,0,-10,100);
+  trackSip2dVal_ = catchInfsAndBound(meas_ip2d.value(),0,-1,70);
+  trackSip2dSig_ = catchInfsAndBound(meas_ip2d.significance(),0,-1,4e4);
+  trackSip3dVal_ = catchInfsAndBound(meas_ip3d.value(),0,-1,1e5);
+  trackSip3dSig_ = catchInfsAndBound(meas_ip3d.significance(),0,-1,4e4);
+  trackJetDistVal_ = catchInfsAndBound(jetdist.value(),0,-20,1);
   trackJetDistSig_ = catchInfs(jetdist.significance());
 
 }

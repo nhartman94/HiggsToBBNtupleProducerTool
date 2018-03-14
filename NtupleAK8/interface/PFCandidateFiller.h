@@ -15,8 +15,8 @@ namespace deepntuples {
 
 class PFCandidateFiller: public NtupleBase {
 public:
-  PFCandidateFiller() : PFCandidateFiller("", 0.8) {}
-  PFCandidateFiller(std::string branchName, double jetR=0.8) : NtupleBase(branchName, jetR) {}
+  PFCandidateFiller() : PFCandidateFiller("", 0.8, -1) {}
+  PFCandidateFiller(std::string branchName, double jetR=0.8, double minPt=-1) : NtupleBase(branchName, jetR, minPt) {}
   virtual ~PFCandidateFiller() {}
 
   // get input parameters from the cfg file
