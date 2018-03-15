@@ -97,6 +97,7 @@ bool TrackFiller::fill(const pat::Jet& jet, size_t jetidx, const JetHelper& jet_
   std::vector<const pat::PackedCandidate*> chargedPFCands;
   std::unordered_map<const pat::PackedCandidate*, TrackInfoBuilder> trackInfoMap;
   for (const auto * pfcand : jet_helper.getJetConstituents()){
+  
     if (pfcand->pt() < minPt_) continue;
     if (pfcand->charge() != 0) {
       chargedPFCands.push_back(pfcand);
@@ -149,27 +150,42 @@ bool TrackFiller::fill(const pat::Jet& jet, size_t jetidx, const JetHelper& jet_
     data.fillMulti<float>("track_lostInnerHits", cpf->lostInnerHits());
 
     // impact parameters
-    data.fillMulti<float>("track_dz", catchInfs(cpf->dz()));
-    data.fillMulti<float>("track_dzsig", catchInfs(cpf->dz()/cpf->dzError()));
     data.fillMulti<float>("track_dxy", catchInfs(cpf->dxy()));
-    data.fillMulti<float>("track_dxysig", catchInfs(cpf->dxy()/cpf->dxyError()));
+    data.fillMulti<float>("track_dz", catchInfs(cpf->dz()));
 
-    const auto &trk = cpf->pseudoTrack();
-    data.fillMulti<float>("track_normchi2", catchInfs(trk.normalizedChi2()));
-    data.fillMulti<float>("track_quality", trk.qualityMask());
-
-    // track covariance
-    auto cov = [&](unsigned i, unsigned j) {
-      return catchInfs(trk.covariance(i, j));
-    };
-    data.fillMulti<float>("track_dptdpt", cov(0,0));
-    data.fillMulti<float>("track_detadeta", cov(1,1));
-    data.fillMulti<float>("track_dphidphi", cov(2,2));
-    data.fillMulti<float>("track_dxydxy", cov(3,3));
-    data.fillMulti<float>("track_dzdz", cov(4,4));
-    data.fillMulti<float>("track_dxydz", cov(3,4));
-    data.fillMulti<float>("track_dphidxy", cov(2,3));
-    data.fillMulti<float>("track_dlambdadz", cov(1,4));
+    if( cpf->hasTrackDetails() ) {
+      const auto &trk = cpf->pseudoTrack();
+      data.fillMulti<float>("track_dxysig", catchInfsAndBound(cpf->dxy()/cpf->dxyError(),0,-2000,2000));
+      data.fillMulti<float>("track_dzsig", catchInfsAndBound(cpf->dz()/cpf->dzError(),0,-2000,2000));   
+      data.fillMulti<float>("track_normchi2", catchInfsAndBound(trk.normalizedChi2(),300,-1,300));
+      data.fillMulti<float>("track_quality", trk.qualityMask());
+      // track covariance
+      auto cov = [&](unsigned i, unsigned j) {
+	return catchInfs(trk.covariance(i, j));
+      };
+      data.fillMulti<float>("track_dptdpt", cov(0,0));
+      data.fillMulti<float>("track_detadeta", cov(1,1));
+      data.fillMulti<float>("track_dphidphi", cov(2,2));
+      data.fillMulti<float>("track_dxydxy", cov(3,3));
+      data.fillMulti<float>("track_dzdz", cov(4,4));
+      data.fillMulti<float>("track_dxydz", cov(3,4));
+      data.fillMulti<float>("track_dphidxy", cov(2,3));
+      data.fillMulti<float>("track_dlambdadz", cov(1,4));
+    }
+    else {
+      data.fillMulti<float>("track_dxysig", -1);
+      data.fillMulti<float>("track_dzsig", -1);
+      data.fillMulti<float>("track_normchi2", -1);
+      data.fillMulti<float>("track_quality",(1 << reco::TrackBase::loose));
+      data.fillMulti<float>("track_dptdpt", 0);
+      data.fillMulti<float>("track_detadeta", 0);
+      data.fillMulti<float>("track_dphidphi", 0);
+      data.fillMulti<float>("track_dxydxy", 0);
+      data.fillMulti<float>("track_dzdz", 0);
+      data.fillMulti<float>("track_dxydz", 0);
+      data.fillMulti<float>("track_dphidxy", 0);
+      data.fillMulti<float>("track_dlambdadz", 0);
+    }
 
     const auto &trkinfo = trackInfoMap.at(cpf);
     data.fillMulti<float>("trackBTag_Momentum", trkinfo.getTrackMomentum());
