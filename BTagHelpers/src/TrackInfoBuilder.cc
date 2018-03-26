@@ -62,6 +62,7 @@ void TrackInfoBuilder::buildTrackInfo(const edm::ESHandle<TransientTrackBuilder>
   trackPParRatio_ = catchInfsAndBound(jetDir.Dot(trackMom) / trackMag,0,-10,100);
   trackSip2dVal_ = catchInfsAndBound(meas_ip2d.value(),0,-1,70);
   trackSip2dSig_ = catchInfsAndBound(meas_ip2d.significance(),0,-1,4e4);
+  trackSip2dSigRaw_ = meas_ip2d.significance();
   trackSip3dVal_ = catchInfsAndBound(meas_ip3d.value(),0,-1,1e5);
   trackSip3dSig_ = catchInfsAndBound(meas_ip3d.significance(),0,-1,4e4);
   trackJetDistVal_ = catchInfsAndBound(jetdist.value(),0,-20,1);

@@ -28,6 +28,7 @@ public:
   const float& getTrackPParRatio() const {return trackPParRatio_;}
   const float& getTrackSip2dVal() const {return trackSip2dVal_;}
   const float& getTrackSip2dSig() const {return trackSip2dSig_;}
+  const float& getTrackSip2dSigRaw() const {return trackSip2dSigRaw_;}
   const float& getTrackSip3dVal() const {return trackSip3dVal_;}
   const float& getTrackSip3dSig() const {return trackSip3dSig_;}
   const float& getTrackJetDistVal() const {return trackJetDistVal_;}
@@ -46,6 +47,7 @@ private:
   float trackPParRatio_ = 0;
   float trackSip2dVal_ = 0;
   float trackSip2dSig_ = 0;
+  float trackSip2dSigRaw_ = 0;
   float trackSip3dVal_ = 0;
   float trackSip3dSig_ = 0;
   float trackJetDistVal_ = 0;
