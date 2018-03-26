@@ -11,6 +11,7 @@
 #include "DeepNTuples/NtupleAK8/interface/TrackFiller.h"
 
 #include "DeepNTuples/NtupleCommons/interface/sorting_modules.h"
+#include "DeepNTuples/NtupleCommons/interface/InfinityCatcher.h"
 namespace deepntuples {
 
 void TrackFiller::readConfig(const edm::ParameterSet& iConfig, edm::ConsumesCollector&& cc) {
@@ -160,7 +161,7 @@ bool TrackFiller::fill(const pat::Jet& jet, size_t jetidx, const JetHelper& jet_
     data.fillMulti<float>("track_pt", cpf->pt());
     data.fillMulti<float>("track_mass", cpf->mass());
 
-    data.fillMulti<float>("track_drminsv", drMinSvMap.at(cpf)==0.8? -1 : drMinSvMap.at(cpf));
+    data.fillMulti<float>("track_drminsv", catchInfsAndBound(drMinSvMap.at(cpf),0,-0.8,0,-0.8));
 
     const auto& subjets = jet_helper.getSubJets();
     data.fillMulti<float>("track_drsubjet1", subjets.size()>0 ? reco::deltaR(*cpf, *subjets.at(0)) : -1);

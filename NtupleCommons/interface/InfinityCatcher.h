@@ -14,10 +14,12 @@ inline float catchInfs(const float& in, float replace_value=0){
     return in;
 }
 
-inline float catchInfsAndBound(const float& in, const float& replace_value, const float& lowerbound, const float& upperbound){
+   inline float catchInfsAndBound(const float& in, const float& replace_value, const float& lowerbound, const float& upperbound, const float& offset=0., const bool& use_offsets = true){
     float withoutinfs=catchInfs(in,replace_value);
-    if(withoutinfs<lowerbound) return lowerbound;
-    if(withoutinfs>upperbound) return upperbound;
+    if(withoutinfs+offset<lowerbound) return lowerbound;
+    if(withoutinfs+offset>upperbound) return upperbound;
+    if(use_offsets)
+      withoutinfs+=offset;
     return withoutinfs;
 }
 

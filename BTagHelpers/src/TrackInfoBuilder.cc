@@ -32,7 +32,7 @@ void TrackInfoBuilder::buildTrackInfo(const edm::ESHandle<TransientTrackBuilder>
     trackPtRel_=catchInfsAndBound(trackMom3.Perp(jetDir3),0,-1,4);
     trackPPar_=catchInfsAndBound(jetDir.Dot(pfcand.momentum()),0,-1e5,1e5);
     trackDeltaR_=catchInfsAndBound(reco::deltaR(pfcand.momentum(), jetDir),0,-5,5);
-    trackPtRatio_=catchInfsAndBound(trackMom3.Perp(jetDir3) / pfcand.p(),0,-1,4);
+    trackPtRatio_=catchInfsAndBound(trackMom3.Perp(jetDir3) / pfcand.p(),0,-1,10);
     trackPParRatio_=catchInfsAndBound(jetDir.Dot(pfcand.momentum()) / pfcand.p(),0,-10,100);
     trackSip2dVal_=0.;
     trackSip2dSig_=0.;
