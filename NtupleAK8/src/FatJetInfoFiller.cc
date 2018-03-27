@@ -210,10 +210,11 @@ bool FatJetInfoFiller::fill(const pat::Jet& jet, size_t jetidx, const JetHelper&
   data.fill<float>("fj_mass", jet.mass());
 
   // substructure
-  //Possible userfloats: NjettinessAK8Puppi:tau1 NjettinessAK8Puppi:tau2 NjettinessAK8Puppi:tau3 NjettinessAK8Puppi:tau4 ak8PFJetsCHSValueMap:NjettinessAK8CHSTau1 ak8PFJetsCHSValueMap:NjettinessAK8CHSTau2 ak8PFJetsCHSValueMap:NjettinessAK8CHSTau3 ak8PFJetsCHSValueMap:NjettinessAK8CHSTau4 ak8PFJetsCHSValueMap:ak8PFJetsCHSPrunedMass ak8PFJetsCHSValueMap:ak8PFJetsCHSSoftDropMass ak8PFJetsCHSValueMap:eta ak8PFJetsCHSValueMap:mass ak8PFJetsCHSValueMap:phi ak8PFJetsCHSValueMap:pt ak8PFJetsPuppiSoftDropMass ak8PFJetsPuppiSoftDropValueMap:nb1AK8PuppiSoftDropN2 ak8PFJetsPuppiSoftDropValueMap:nb1AK8PuppiSoftDropN3 ak8PFJetsPuppiSoftDropValueMap:nb2AK8PuppiSoftDropN2 ak8PFJetsPuppiSoftDropValueMap:nb2AK8PuppiSoftDropN3 nb1AK8PuppiSoftDrop:ecfN2 nb1AK8PuppiSoftDrop:ecfN3 nb2AK8PuppiSoftDrop:ecfN2 nb2AK8PuppiSoftDrop:ecfN3 
-  float tau1 = jet.userFloat("NjettinessAK8Puppi:tau1");
-  float tau2 = jet.userFloat("NjettinessAK8Puppi:tau2");
-  float tau3 = jet.userFloat("NjettinessAK8Puppi:tau3");
+  //Possible userfloats (101X): NjettinessAK8Puppi:tau1 NjettinessAK8Puppi:tau2 NjettinessAK8Puppi:tau3 NjettinessAK8Puppi:tau4 ak8PFJetsCHSValueMap:NjettinessAK8CHSTau1 ak8PFJetsCHSValueMap:NjettinessAK8CHSTau2 ak8PFJetsCHSValueMap:NjettinessAK8CHSTau3 ak8PFJetsCHSValueMap:NjettinessAK8CHSTau4 ak8PFJetsCHSValueMap:ak8PFJetsCHSPrunedMass ak8PFJetsCHSValueMap:ak8PFJetsCHSSoftDropMass ak8PFJetsCHSValueMap:eta ak8PFJetsCHSValueMap:mass ak8PFJetsCHSValueMap:phi ak8PFJetsCHSValueMap:pt ak8PFJetsPuppiSoftDropMass ak8PFJetsPuppiSoftDropValueMap:nb1AK8PuppiSoftDropN2 ak8PFJetsPuppiSoftDropValueMap:nb1AK8PuppiSoftDropN3 ak8PFJetsPuppiSoftDropValueMap:nb2AK8PuppiSoftDropN2 ak8PFJetsPuppiSoftDropValueMap:nb2AK8PuppiSoftDropN3 nb1AK8PuppiSoftDrop:ecfN2 nb1AK8PuppiSoftDrop:ecfN3 nb2AK8PuppiSoftDrop:ecfN2 nb2AK8PuppiSoftDrop:ecfN3 
+  //Possible UserFloats (80X) are: NjettinessAK8:tau1 NjettinessAK8:tau2 NjettinessAK8:tau3 ak8PFJetsCHSPrunedMass ak8PFJetsCHSSoftDropMass ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau1 ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau2 ak8PFJetsPuppiValueMap:NjettinessAK8PuppiTau3 ak8PFJetsPuppiValueMap:eta ak8PFJetsPuppiValueMap:mass ak8PFJetsPuppiValueMap:phi ak8PFJetsPuppiValueMap:pt 
+  float tau1 = jet.userFloat("NjettinessAK8:tau1");
+  float tau2 = jet.userFloat("NjettinessAK8:tau2");
+  float tau3 = jet.userFloat("NjettinessAK8:tau3");
   data.fill<float>("fj_tau1", tau1);
   data.fill<float>("fj_tau2", tau2);
   data.fill<float>("fj_tau3", tau3);
@@ -221,7 +222,7 @@ bool FatJetInfoFiller::fill(const pat::Jet& jet, size_t jetidx, const JetHelper&
   data.fill<float>("fj_tau32", tau2 > 0 ? tau3/tau2 : 1.01);
 
   // soft drop
-  data.fill<float>("fj_sdmass", jet.userFloat("ak8PFJetsPuppiSoftDropMass"));
+  data.fill<float>("fj_sdmass", jet.userFloat("ak8PFJetsCHSSoftDropMass"));
 
   // subjets: soft drop gives up to 2 subjets
   const auto& subjets = jet_helper.getSubJets();

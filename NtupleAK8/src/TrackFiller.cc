@@ -181,7 +181,8 @@ bool TrackFiller::fill(const pat::Jet& jet, size_t jetidx, const JetHelper& jet_
     data.fillMulti<float>("track_dxy", catchInfs(cpf->dxy()));
     data.fillMulti<float>("track_dz", catchInfs(cpf->dz()));
 
-    if( cpf->hasTrackDetails() ) {
+    //if( cpf->hasTrackDetails() ) { // 101X
+    if( true ) { // 80X
       const auto &trk = cpf->pseudoTrack();
       data.fillMulti<float>("track_dxysig", catchInfsAndBound(cpf->dxy()/cpf->dxyError(),0,-2000,2000));
       data.fillMulti<float>("track_dzsig", catchInfsAndBound(cpf->dz()/cpf->dzError(),0,-2000,2000));   

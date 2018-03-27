@@ -20,7 +20,8 @@ void TrackInfoBuilder::buildTrackInfo(const edm::ESHandle<TransientTrackBuilder>
   //std::cout << "pv = " << pv.x() << pv.y() << pv.z() << std::endl;
 
     
-  if(!pfcand.hasTrackDetails()) {
+  //if(!pfcand.hasTrackDetails()) { // 101X
+  if(false) { // 80X
     TVector3 trackMom3(
 		       pfcand.momentum().x(),
 		       pfcand.momentum().y(),

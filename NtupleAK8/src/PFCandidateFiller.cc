@@ -108,7 +108,8 @@ bool PFCandidateFiller::fill(const pat::Jet& jet, size_t jetidx, const JetHelper
     // impact parameters
     data.fillMulti<float>("pfcand_dz", catchInfs(pfcand->dz()));
     data.fillMulti<float>("pfcand_dxy", catchInfs(pfcand->dxy()));
-    if( pfcand->hasTrackDetails() ) {
+    //if( pfcand->hasTrackDetails() ) { // 101X
+    if( true ) { // 80X
       data.fillMulti<float>("pfcand_dzsig", catchInfsAndBound(pfcand->dz()/pfcand->dzError(),0,-2000,2000));
       data.fillMulti<float>("pfcand_dxysig", catchInfsAndBound(pfcand->dxy()/pfcand->dxyError(),0,-2000,2000));
     }
