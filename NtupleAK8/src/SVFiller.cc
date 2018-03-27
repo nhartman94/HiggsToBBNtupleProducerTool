@@ -77,7 +77,7 @@ bool SVFiller::fill(const pat::Jet& jet, size_t jetidx, const JetHelper& jet_hel
     data.fillMulti<float>("sv_erel", sv->energy() / jet.energy());
     data.fillMulti<float>("sv_phirel", reco::deltaPhi(*sv, jet));
     data.fillMulti<float>("sv_etarel", etasign * (sv->eta() - jet.eta()));
-    data.fillMulti<float>("sv_deltaR", reco::deltaR(*sv, jet));
+    data.fillMulti<float>("sv_deltaR", catchInfsAndBound(std::fabs(reco::deltaR(*sv,jet))-0.5,0,-2,0));
     data.fillMulti<float>("sv_pt", sv->pt());
     data.fillMulti<float>("sv_mass", sv->mass());
 
@@ -85,17 +85,17 @@ bool SVFiller::fill(const pat::Jet& jet, size_t jetidx, const JetHelper& jet_hel
     data.fillMulti<float>("sv_ntracks", sv->numberOfDaughters());
     data.fillMulti<float>("sv_chi2", sv->vertexChi2());
     data.fillMulti<float>("sv_ndf", sv->vertexNdof());
-    data.fillMulti<float>("sv_normchi2", catchInfs(sv->vertexNormalizedChi2()));
+    data.fillMulti<float>("sv_normchi2", catchInfsAndBound(sv->vertexNormalizedChi2(), 1000, -1000, 1000));
 
     const auto &dxy = vertexDxy(*sv, pv);
     data.fillMulti<float>("sv_dxy", dxy.value());
     data.fillMulti<float>("sv_dxyerr", dxy.error());
-    data.fillMulti<float>("sv_dxysig", dxy.significance());
+    data.fillMulti<float>("sv_dxysig", catchInfsAndBound(dxy.significance(), 0,-1,800));
 
     const auto &d3d = vertexD3d(*sv, pv);
     data.fillMulti<float>("sv_d3d", d3d.value());
     data.fillMulti<float>("sv_d3derr", d3d.error());
-    data.fillMulti<float>("sv_d3dsig", d3d.significance());
+    data.fillMulti<float>("sv_d3dsig", catchInfsAndBound(d3d.significance(), 0,-1,800));
     data.fillMulti<float>("sv_costhetasvpv", vertexDdotP(*sv, pv));
   }
 
