@@ -5,7 +5,7 @@
 cmsrel CMSSW_8_0_28
 cd CMSSW_8_0_28/src/
 cmsenv
-git clone https://github.com/hqucms/DNNTuplesAK8 DeepNTuples
+git clone https://github.com/DeepDoubleB/DNNTuplesAK8 DeepNTuples -b minpt95_80X
 scram b -j8
 ```
 
