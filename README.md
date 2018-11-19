@@ -5,8 +5,8 @@
 cmsrel CMSSW_8_0_28
 cd CMSSW_8_0_28/src/
 cmsenv
-git clone https://github.com/DeepDoubleB/DNNTuplesAK8 DeepNTuples -b minpt95_80X
-scram b -j8
+git clone https://github.com/DeepDoubleB/DNNTuplesAK8 DeepNTuples -b opendata_80X
+scram b 
 ```
 
 ## Submit jobs via CRAB
