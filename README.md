@@ -4,7 +4,7 @@
 
 Running the data processing uses `CMSSW_8_0_28` 
 
-```
+```bash
 cmsrel CMSSW_8_0_28
 cd CMSSW_8_0_28/src/
 cmsenv
