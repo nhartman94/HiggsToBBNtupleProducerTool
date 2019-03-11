@@ -8,7 +8,7 @@ Running the data processing uses `CMSSW_8_0_28`
 cmsrel CMSSW_8_0_28
 cd CMSSW_8_0_28/src/
 cmsenv
-git clone https://github.com/cms-legacydata-analyses/DNNTuplesAK8 DeepNTuples -b opendata_80X
+git clone https://github.com/cms-legacydata-analyses/HiggsToBBNtupleProducerTool DeepNTuples -b opendata_80X
 scram b 
 # set up CRAB env; run it after cmsenv
 voms-proxy-init -rfc -voms cms --valid 168:00
