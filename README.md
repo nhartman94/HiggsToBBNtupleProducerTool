@@ -1,4 +1,6 @@
-# DNNTuplesAK8
+# HiggsToBBNtupleProducerTool
+
+`ROOT` Ntuple producer for developing machine learning algorithms to differentiate Higgs to bb (Hbb) jets from quark or gluon jets (QCD).
 
 ## Setup
 
@@ -52,9 +54,10 @@ mergeSamples.py 200000 ${MERGEDIR} ${OUTDIR}/QCD_Pt_*/QCD_Pt_*max3files.txt ${OU
 ``` 
 
 3. Split into training and testing samples
+
 ```bash
-export TRAINDIR=/eos/uscms/store/group/lpcbtag/20181121_ak8_80x/merged_max3files/train
-export TESTDIR=/eos/uscms/store/group/lpcbtag/20181121_ak8_80x/merged_max3files/test
+export TRAINDIR=${MERGEDIR}/train
+export TESTDIR=${MERGEDIR}/test
 mkdir -p $TRAINDIR $TESTDIR
 mv ${MERGEDIR}/ntuple_merged_[.0-8.].root ${TESTDIR}/
 mv ${MERGEDIR}/ntuple_merged_*.root ${TRAINDIR}/
@@ -68,7 +71,7 @@ This step requires a more recent version of CMSSW.
 cmsrel CMSSW_10_4_0
 cd CMSSW_10_4_0/src/
 cmsenv
-wget https://raw.githubusercontent.com/cms-legacydata-analyses/DNNTuplesAK8/opendata_80X/NtupleAK8/scripts/convert-uproot-opendata.py
+wget https://raw.githubusercontent.com/cms-legacydata-analyses/HiggsToBBNtupleProducerToo/opendata_80X/NtupleAK8/scripts/convert-uproot-opendata.py
 ```
 
 Then you can run
