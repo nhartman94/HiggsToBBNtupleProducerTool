@@ -1,6 +1,3 @@
-
-# coding: utf-8
-
 import uproot
 import pandas
 import numpy as np
@@ -8,10 +5,11 @@ import pandas as pd
 import h5py
 import tables
 import sys
-
 filters = tables.Filters(complevel=7, complib='blosc')
 
 infile = sys.argv[1]
+outfile = sys.argv[2]
+entrystop = None
 upfile = uproot.open(infile)
 
 tree = upfile['deepntuplizer/tree']
@@ -41,48 +39,38 @@ print(sv_branches)
 def _write_carray(a, h5file, name, group_path='/', **kwargs):
     h5file.create_carray(group_path, name, obj=a, filters=filters, createparents=True, **kwargs)
     
-def _transform(dataframe, max_particles=100, start=0, stop=-1):
-    from collections import OrderedDict
-    v = OrderedDict()
-    
-    df = dataframe.iloc[start:stop]
-    max_jets = len(df.index.get_level_values(0).unique())
-    
-    for column in df.columns:
-        c = np.zeros((max_jets, max_particles))
-        for i, new_df in df[column].groupby(level=0):
-            max_part = min(max_particles,len(new_df))
-            c[i,:max_part] = new_df[:max_part].values
-        v[column] = c
-    return v
+def _transform(dataframe, max_particles=100, start=0, stop=-1):    
+    return dataframe[dataframe.index.get_level_values(-1)<max_particles].unstack().fillna(0)
 
-df_other = tree.pandas.df(branches=other_branches, entrystart=0, entrystop = None)
-df_sv = tree.pandas.df(branches=sv_branches, entrystart=0, entrystop = None)
-df_track = tree.pandas.df(branches=track_branches, entrystart=0, entrystop = None)
-df_pfcand = tree.pandas.df(branches=pfcand_branches, entrystart=0, entrystop = None)
-df_fj = tree.pandas.df(branches=fj_branches, entrystart=0, entrystop = None)
+df_other = tree.pandas.df(branches=other_branches, entrystart=0, entrystop = entrystop)
+df_sv = tree.pandas.df(branches=sv_branches, entrystart=0, entrystop = entrystop)
+df_track = tree.pandas.df(branches=track_branches, entrystart=0, entrystop = entrystop)
+df_pfcand = tree.pandas.df(branches=pfcand_branches, entrystart=0, entrystop = entrystop)
+df_fj = tree.pandas.df(branches=fj_branches, entrystart=0, entrystop = entrystop)
 
-
-with tables.open_file(infile.replace('.root','.h5'), mode='w') as h5file:
+with tables.open_file(outfile, mode='w') as h5file:
     
-    max_tracks = len(df_track.index.get_level_values(1).unique())
-    max_sv = len(df_sv.index.get_level_values(1).unique())
-    max_pfcand = len(df_pfcand.index.get_level_values(1).unique())
+    max_tracks = len(df_track.index.get_level_values(-1).unique())
+    max_sv = len(df_sv.index.get_level_values(-1).unique())
+    max_pfcand = len(df_pfcand.index.get_level_values(-1).unique())
     print("max_tracks",max_tracks)
     print("max_sv",max_sv)
     print("max_pfcand",max_pfcand)
     
     v_track = _transform(df_track, max_particles = 60)
-    for k in v_track.keys():
-        _write_carray(v_track[k], h5file, name=k)
+    for k in track_branches:
+        v = np.stack([v_track[(k, i)].values for i in range(60)], axis=-1)
+        _write_carray(v, h5file, name=k)
         
     v_sv = _transform(df_sv, max_particles = 5)
-    for k in v_sv.keys():
-        _write_carray(v_sv[k], h5file, name=k)
+    for k in sv_branches:
+        v = np.stack([v_sv[(k, i)].values for i in range(5)], axis=-1)
+        _write_carray(v, h5file, name=k)
         
     v_pfcand = _transform(df_pfcand, max_particles = 100)
-    for k in v_pfcand.keys():
-        _write_carray(v_pfcand[k], h5file, name=k)
+    for k in pfcand_branches:
+        v = np.stack([v_pfcand[(k, i)].values for i in range(100)], axis=-1)
+        _write_carray(v, h5file, name=k)
         
     for k in df_fj.columns:
         _write_carray(df_fj[k].values, h5file, name=k)
@@ -90,8 +78,6 @@ with tables.open_file(infile.replace('.root','.h5'), mode='w') as h5file:
     for k in df_other.columns:
         _write_carray(df_other[k].values, h5file, name=k)
 
-
-f = tables.open_file(infile.replace('.root','.h5'))
+f = tables.open_file(outfile)
 print(f)
 f.close()
-
