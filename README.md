@@ -1,6 +1,6 @@
 # HiggsToBBNtupleProducerTool
 
-`ROOT` ntuple producer for developing machine learning algorithms to differentiate jets origininating from a Higgs boson decaying to a bottom quark-antiquark pair (Hbb) from quark or gluon jets originating from quantum chromodynamic (QCD) multijet production.
+`ROOT` ntuple producer for developing machine learning algorithms to differentiate jets originating from a Higgs boson decaying to a bottom quark-antiquark pair (Hbb) from quark or gluon jets originating from quantum chromodynamic (QCD) multijet production.
 
 ## Setup
 
@@ -33,7 +33,7 @@ Repeat this for all of the input files in the QCD and Hbb datasets.
 
 ```bash
 cd DeepNTuples/NtupleAK8/run
-export OUTDIR=/eos/uscms/store/group/lpcbtag/20181121_ak8_80x/OpenData
+export OUTDIR=/path/to/files/
 ls $OUTDIR > samples.txt
 for i in `cat samples.txt`; 
  do cd ${OUTDIR}/${i}; 
@@ -49,7 +49,7 @@ mergeSamples.py [events per output file] [output dir] [path to the filelist prod
 ```
 e.g.,
 ```bash
-export MERGEDIR=/eos/uscms/store/group/lpcbtag/20181121_ak8_80x/merged_max3files
+export MERGEDIR=/path/to/files/merged_max3files/
 mergeSamples.py 200000 ${MERGEDIR} ${OUTDIR}/QCD_Pt_*/QCD_Pt_*max3files.txt ${OUTDIR}/Bulk*/Bulk*max3files.txt
 ```
 
@@ -82,13 +82,13 @@ e.g.,
 ```
 python convert-uproot-opendata.py ${TRAINDIR}/ntuple_merged_10.root ${TRAINDIR}/ntuple_merged_10.h5
 ```
-which produces `HDF5` files with different arrays for each output variable. Note that during this conversion, only the information for up to 100 particle candidataes, 60 tracks, and 5 secondary vertices are saved in flattened, zero-padded, fixed-length arrays.
+which produces `HDF5` files with different arrays for each output variable. Note that during this conversion, only the information for up to 100 particle candidates, 60 tracks, and 5 secondary vertices are saved in flattened, zero-padded, fixed-length arrays.
 
 ## Data set content
 
 Variables are saved to the `ROOT` trees and `HDF5` tables jet by jet.
 
-The reconstructed jets are clustered using the anti-kT algorithm with R=0.8 from particle flow (PF) candidates (AK8 jets). The standard L1+L2+L3+residual jet energy corrections are applied to the jets and pileup contamination is mitigated using the charged hadron subtraction (CHS) algorithm. Features of the AK8 jets with transverse momentum pT > 200 GeV and psedorapidity |η| < 2.4 are provided. Selected features of inclusive (both charged and neutral) PF candidates with pT > 0.95 GeV associated to the AK8 jet are provided. Additional features of charged PF candidates (formed primarily by a charged particle track) with pT > 0.95 GeV associated to the AK8 jet are also provided. Finally, additional features of reconstructed secondary vertices (SVs) associated to the AK8 jet (within ∆R < 0.8) are also provided.
+The reconstructed jets are clustered using the anti-kT algorithm with R=0.8 from particle flow (PF) candidates (AK8 jets). The standard L1+L2+L3+residual jet energy corrections are applied to the jets and pileup contamination is mitigated using the charged hadron subtraction (CHS) algorithm. Features of the AK8 jets with transverse momentum pT > 200 GeV and pseudorapidity |η| < 2.4 are provided. Selected features of inclusive (both charged and neutral) PF candidates with pT > 0.95 GeV associated to the AK8 jet are provided. Additional features of charged PF candidates (formed primarily by a charged particle track) with pT > 0.95 GeV associated to the AK8 jet are also provided. Finally, additional features of reconstructed secondary vertices (SVs) associated to the AK8 jet (within ∆R < 0.8) are also provided.
 
 
 | Data variable | Type | Description |
@@ -110,7 +110,7 @@ The reconstructed jets are clustered using the anti-kT algorithm with R=0.8 from
 | `fj_isTop` | Int_t | Boolean that is 1 if a generator-level top quark and its daughters are geometrically matched to the AK8 jet |
 | `fj_isW` | Int_t | Boolean that is 1 if a generator-level W boson and its daughters are geometrically matched to the AK8 jet |
 | `fj_isZ` | Int_t | Boolean that is 1 if a generator-level Z boson and its daughters are geometrically matched to the AK8 jet |
-| `fj_isQCD` | Int_t | Boolean that is 1 if none of the above matching criteria are satisified (H, top, W, Z) |
+| `fj_isQCD` | Int_t | Boolean that is 1 if none of the above matching criteria are satisfied (H, top, W, Z) |
 | `fj_label` | Int_t | Integer label: `Invalid=0,  Top_all=10, Top_bcq=11, Top_bqq=12, Top_bc=13, Top_bq=14, W_all=20, W_cq=21, W_qq=22, Z_all=30, Z_bb=31, Z_cc=32, Z_qq=33, H_all=40, H_bb=41, H_cc=42, H_qqqq=43, QCD_all=50, QCD_bb=51, QCD_cc=52, QCD_b=53, QCD_c=54, QCD_others=55` |
 | `fj_labelJMAR` | Int_t | Alternative integer label from the CMS Jet/MET and Resolution (JMAR) group:  `Default=0, Top=1, W=2, Z=3, H=4` |
 | `fj_labelLegacy` | Int_t | Alternative (legacy) integer label: `Default=0, Top=1, W=2, Z=3, H=4` |
@@ -123,21 +123,21 @@ The reconstructed jets are clustered using the anti-kT algorithm with R=0.8 from
 | `fj_tau1` | Float_t | N-subjettiness variable for a 1-prong jet hypothesis |
 | `fj_tau2` | Float_t | N-subjettiness variable for a 2-prong jet hypothesis |
 | `fj_tau3` | Float_t | N-subjettiness variable for a 3-prong jet hypothesis |
-| `fj_tau21` | Float_t | N-subjettiness variable for 2-prong vs 1-prong jet discrimination (fj_tau2/fj_tau1) |
-| `fj_tau32` | Float_t | N-subjettiness variable for 3-prong vs 2-prong jet discrimination (fj_tau3/fj_tau2) |
+| `fj_tau21` | Float_t | N-subjettiness variable for 2-prong vs 1-prong jet discrimination (`fj_tau2/fj_tau1`) |
+| `fj_tau32` | Float_t | N-subjettiness variable for 3-prong vs 2-prong jet discrimination (`fj_tau3/fj_tau2`) |
 | `fj_sdmass` | Float_t | Soft drop mass of the AK8 jet |
 | `fj_ptDR` | Float_t | Transverse momentum times the ΔR between the two soft drop subjets |
 | `fj_relptdiff` | Float_t | Absolute relative difference between the transverse momenta of the two softdrop subjets |
 | `fj_sdn2` | Float_t | Fraction of second subjet transverse momentum times ∆R squared |
 | `fj_sdsj1_axis1` | Float_t | First axis of the first subjet |
 | `fj_sdsj1_axis2` | Float_t | Second axis of the first subjet |
-| `fj_sdsj1_csv` | Float_t | Combined secondary vertex (CSV) b-tagging discriminant for the first subject |
+| `fj_sdsj1_csv` | Float_t | Combined secondary vertex (CSV) b-tagging discriminant for the first subjet |
 | `fj_sdsj1_eta` | Float_t | Pseudorapidity η of the first subjet |
 | `fj_sdsj1_mass` | Float_t | Mass of the first subjet |
 | `fj_sdsj1_mult` | Float_t | Particle multiplicity of the first subjet |
 | `fj_sdsj1_phi` | Float_t | Azimuthal angle ϕ of the first subjet |
 | `fj_sdsj1_pt` | Float_t | Transverse momentum of the first subjet |
-| `fj_sdsj1_ptD` | Float_t | ptD variable, defined as the square root of the sum in quadrature of the transverse momentum of the subjet constituents divided by the scalar sum of the transvese momentum of the subjet constituents, for the first subjet (see [CMS-PAS-JME-13-002](https://cds.cern.ch/record/1599732)) |
+| `fj_sdsj1_ptD` | Float_t | ptD variable, defined as the square root of the sum in quadrature of the transverse momentum of the subjet constituents divided by the scalar sum of the transverse momentum of the subjet constituents, for the first subjet (see [CMS-PAS-JME-13-002](https://cds.cern.ch/record/1599732)) |
 | `fj_sdsj2_axis1` | Float_t | First axis of the first subjet |
 | `fj_sdsj2_axis2` | Float_t | Second axis of the first subjet |
 | `fj_sdsj2_csv` | Float_t | Combined secondary vertex (CSV) b-tagging discriminant for the first subject |
@@ -146,8 +146,8 @@ The reconstructed jets are clustered using the anti-kT algorithm with R=0.8 from
 | `fj_sdsj2_mult` | Float_t | Particle multiplicity of the second subjet |
 | `fj_sdsj2_phi` | Float_t | Azimuthal angle ϕ of the second subjet |
 | `fj_sdsj2_pt` | Float_t | Transverse momentum of the second subjet |
-| `fj_sdsj2_ptD` | Float_t | ptD variable, defined as the square root of the sum in quadrature of the transverse momentum of the subjet constituents divided by the scalar sum of the transvese momentum of the subjet constituents, for the second subjet (see [CMS-PAS-JME-13-002](https://cds.cern.ch/record/1599732)) |
-| `fj_z_ratio` | Float_t | z ratio varible as defined in [CMS-BTV-16-002](http://cms-results.web.cern.ch/cms-results/public-results/publications/BTV-16-002/) |
+| `fj_sdsj2_ptD` | Float_t | ptD variable, defined as the square root of the sum in quadrature of the transverse momentum of the subjet constituents divided by the scalar sum of the transverse momentum of the subjet constituents, for the second subjet (see [CMS-PAS-JME-13-002](https://cds.cern.ch/record/1599732)) |
+| `fj_z_ratio` | Float_t | z ratio variable as defined in [CMS-BTV-16-002](http://cms-results.web.cern.ch/cms-results/public-results/publications/BTV-16-002/) |
 | `fj_trackSipdSig_0` | Float_t | First largest track 3D signed impact parameter significance (see [CMS-BTV-16-002](http://cms-results.web.cern.ch/cms-results/public-results/publications/BTV-16-002/) ) |
 | `fj_trackSipdSig_1` | Float_t | Second largest track 3D signed impact parameter significance (see [CMS-BTV-16-002](http://cms-results.web.cern.ch/cms-results/public-results/publications/BTV-16-002/) ) |
 | `fj_trackSipdSig_2` | Float_t | Third largest track 3D signed impact parameter significance (see [CMS-BTV-16-002](http://cms-results.web.cern.ch/cms-results/public-results/publications/BTV-16-002/) )  |
@@ -168,13 +168,13 @@ The reconstructed jets are clustered using the anti-kT algorithm with R=0.8 from
 | `fj_tau_vertexMass_0` | Float_t | Total SV mass for the first N-subjettiness axis, defined as the invariant mass of all tracks from SVs associated with the first N-subjettiness axis |
 | `fj_tau_vertexMass_1` | Float_t | Total SV mass for the second N-subjettiness axis, defined as the invariant mass of all tracks from SVs associated with the second N-subjettiness axis |
 | `fj_tau_vertexEnergyRatio_0` | Float_t | SV vertex energy ratio for the first N-subjettiness axis, defined as the total energy of all SVs associated with the first N-subjettiness axis divided by the total energy of all the tracks associated with the AK8 jet that are consistent with the PV |
-| `fj_tau_vertexEnergyRatio_1` | Float_t | SVenergy ratio for the second N-subjettiness axis, defined as the total energy of all SVs associated with the first N-subjettiness axis divided by the total energy of all the tracks associated with the AK8 jet that are consistent with the PV |
+| `fj_tau_vertexEnergyRatio_1` | Float_t | SV energy ratio for the second N-subjettiness axis, defined as the total energy of all SVs associated with the first N-subjettiness axis divided by the total energy of all the tracks associated with the AK8 jet that are consistent with the PV |
 | `fj_tau_flightDistance2dSig_0` | Float_t | Transverse (2D) flight distance significance between the PV and the SV with the smallest uncertainty on the 3D flight distance associated to the first N-subjettiness axis |
 | `fj_tau_flightDistance2dSig_1` | Float_t | Transverse (2D) flight distance significance between the PV and the SV with the smallest uncertainty on the 3D flight distance associated to the second N-subjettiness axis |
 | `fj_tau_vertexDeltaR_0` | Float_t | Pseudoangular distance ∆R between the first N-subjettiness axis and SV direction |
 | `n_pfcands` | Int_t | Number of particle flow (PF) candidates associated to the AK8 jet with transverse momentum greater than 0.95 GeV |
 | `npfcands` | Float_t | Number of particle flow (PF) candidates associated to the AK8 jet with transverse momentum greater than 0.95 GeV |
-| `pfcand_VTX_ass` | Int_t | PV association quality for the PF candiate: `UsedInFitTight=7`, the track is used in the PV fit and the weight is above 0.5; `UsedInFitLoose=6`,  the track is used in the PV fit and the weight is below 0.5; `CompatibilityDz=5` the track is not used in fit but is very close in `dz` to the PV (`dzsig` < 5 or `dz` < 300 um); `CompatibilityBTag=4`, the track is not compatible with the PV but it is close to the nearest jet axis starting from the PV (distance to jet axis < 700 um); `NotReconstructedPrimary=0`, the track is not associated to any PV and is compatible with the beam spot hence it is likely to be originating from an interaction for which we did not reconstruct the PV (beam spot compatiblity: `dxysig` < 2 and `dxy` < 200 um); `OtherDeltaZ=1`, none of the above criteria is satisfied, hence the closest in `dz` vertex is associated) |
+| `pfcand_VTX_ass` | Int_t | PV association quality for the PF candiate: `UsedInFitTight=7`, the track is used in the PV fit and the weight is above 0.5; `UsedInFitLoose=6`,  the track is used in the PV fit and the weight is below 0.5; `CompatibilityDz=5` the track is not used in fit but is very close in `dz` to the PV (`dzsig` < 5 or `dz` < 300 um); `CompatibilityBTag=4`, the track is not compatible with the PV but it is close to the nearest jet axis starting from the PV (distance to jet axis < 700 um); `NotReconstructedPrimary=0`, the track is not associated to any PV and is compatible with the beam spot hence it is likely to be originating from an interaction for which we did not reconstruct the PV (beam spot compatibility: `dxysig` < 2 and `dxy` < 200 um); `OtherDeltaZ=1`, none of the above criteria is satisfied, hence the closest in `dz` vertex is associated) |
 | `pfcand_charge` | Float_t | Electric charge of the PF candidate  |
 | `pfcand_deltaR` | Float_t | Pseudoangular distance ∆R between the PF candidate and the AK8 jet axis |
 | `pfcand_drminsv` | Float_t | Minimum pseudoangular distance ∆R between the associated SVs and the PF candidate |
@@ -186,8 +186,8 @@ The reconstructed jets are clustered using the anti-kT algorithm with R=0.8 from
 | `pfcand_dzsig` | Float_t | Longitudinal impact parameter significance of the PF candidate |
 | `pfcand_erel` | Float_t | Energy of the PF candidate divided by the energy of the AK8 jet |
 | `pfcand_etarel` | Float_t | Pseudorapidity of the PF candidate relative to the AK8 jet axis |
-| `pfcand_phirel` | Float_t | Azuimuthal angular distance ∆ϕ between the PF candidate and the AK8 jet axis |
-| `pfcand_ptrel` | Float_t | Trasnverse momentum of the PF candidate divided by the transverse momentum of the AK8 jet |
+| `pfcand_phirel` | Float_t | Azimuthal angular distance ∆ϕ between the PF candidate and the AK8 jet axis |
+| `pfcand_ptrel` | Float_t | Transverse momentum of the PF candidate divided by the transverse momentum of the AK8 jet |
 | `pfcand_fromPV` | Float_t | Integer indicating whether the PF candidate is consistent with the PV: `PVUsedInFit=3`, if the track is used in the PV fit; `PVTight=2` if the track is not used in the fit of any of the other PVs and is closest in z to the PV, `PVLoose=1` if the track is closest in z to a PV other then the PV; `NoPV=0` if the track is used in the fit of another PV |
 | `pfcand_hcalFrac` | Float_t | Fraction of energy of the PF candidate deposited in the hadron calorimeter |
 | `pfcand_isChargedHad` | Float_t | Boolean that is 1 if the PF candidate is classified as a charged hadron |
@@ -195,7 +195,7 @@ The reconstructed jets are clustered using the anti-kT algorithm with R=0.8 from
 | `pfcand_isGamma` | Float_t | Boolean that is 1 if the PF candidate is classified as an photon |
 | `pfcand_isMu` | Float_t | Boolean that is 1 if the PF candidate is classified as an muon |
 | `pfcand_isNeutralHad` | Float_t | Boolean that is 1 if the PF candidate is classified as a neutral hadron |
-| `pfcand_lostInnerHits` | Float_t | Integer with information related to inner silicon tracker hits for the PF candidate: `validHitInFirstPixelBarrelLayer=-1`, if the track has a valid hit in the first pixel barrel layer; `noLostInnerHits=0` if it does not have such hit because of geometrical or detector inefficiencies (i.e. the hit wasn't expected to be there); `oneLostHit=1`, if the track extrapolation towards the beamline crosses an active detector but no hit is found there; `moreLostHits=2` if there are at least two missing expected inner hits |
+| `pfcand_lostInnerHits` | Float_t | Integer with information related to inner silicon tracker hits for the PF candidate: `validHitInFirstPixelBarrelLayer=-1`, if the track has a valid hit in the first pixel barrel layer; `noLostInnerHits=0` if it does not have such hit because of geometrical or detector inefficiencies (i.e. the hit wasn't expected to be there); `oneLostHit=1`, if the track extrapolation towards the beam line crosses an active detector but no hit is found there; `moreLostHits=2` if there are at least two missing expected inner hits |
 | `pfcand_mass` | Float_t | Mass of the PF candidate |
 | `pfcand_puppiw` | Float_t | Pileup per-particle identification (PUPPI) weight indicating whether the PF candidate is pileup-like (0) or not (1) |
 | `n_tracks` | Int_t | Number of tracks associated with the AK8 jet |
@@ -206,14 +206,14 @@ The reconstructed jets are clustered using the anti-kT algorithm with R=0.8 from
 | `trackBTag_JetDistVal` | Float_t | Minimum track approach distance to the AK8 jet axis |
 | `trackBTag_Momentum` | Float_t | Momentum of the track |
 | `trackBTag_PPar` | Float_t | Component of track momentum parallel to the AK8 jet axis |
-| `trackBTag_PParRatio` | Float_t | Component of track momentum parallel to the AK8 jet axis, normalized to the AK8 jet energy |
-| `trackBTag_PtRatio` | Float_t | Component of track momentum perpendicular to the AK8 jet axis, normalized to the AK8 jet energy |
-| `trackBTag_PtRel` | Float_t | Component of track momentum perpendicular to the AK8 jet axis, normalized to the AK8 jet energy |
-| `trackBTag_Sip2dVal` | Float_t | Tranverse (2D) signed impact paramater of the track |
-| `trackBTag_Sip2dSig` | Float_t | Tranverse (2D) signed impact paramater significance of the track |
-| `trackBTag_Sip3dSig` | Float_t | 3D signed impact paramater signifiance of the track |
-| `trackBTag_Sip3dVal` | Float_t | 3D signed impact paramater of the track |
-| `track_VTX_ass` | Float_t | PV association quality for the track: `UsedInFitTight=7`, the track is used in the PV fit and the weight is above 0.5; `UsedInFitLoose=6`, the track is used in the PV fit and the weight is below 0.5; `CompatibilityDz=5` the track is not used in fit but is very close in `dz` to the PV (`dzsig` < 5 or `dz` < 300 um); `CompatibilityBTag=4`, the track is not compatible with the PV but it is close to the nearest jet axis starting from the PV (distance to jet axis < 700 um); `NotReconstructedPrimary=0`, the track is not associted to any PV and is compatible with the BeamSpot hence it is likely to be originating from an interaction for which we did not reconstruct the PV (beamspot compatiblity: `dxysig` < 2 and `dxy` < 200 um); `OtherDeltaZ=1`, none of the above criteria is satisfied, hence the closest in dZ vertex is associated) |
+| `trackBTag_PParRatio` | Float_t | Component of track momentum parallel to the AK8 jet axis, normalized to the track momentum |
+| `trackBTag_PtRatio` | Float_t | Component of track momentum perpendicular to the AK8 jet axis, normalized to the track momentum |
+| `trackBTag_PtRel` | Float_t | Component of track momentum perpendicular to the AK8 jet axis |
+| `trackBTag_Sip2dVal` | Float_t | Transverse (2D) signed impact paramater of the track |
+| `trackBTag_Sip2dSig` | Float_t | Transverse (2D) signed impact paramater significance of the track |
+| `trackBTag_Sip3dSig` | Float_t | 3D signed impact parameter significance of the track |
+| `trackBTag_Sip3dVal` | Float_t | 3D signed impact parameter of the track |
+| `track_VTX_ass` | Float_t | PV association quality for the track: `UsedInFitTight=7`, the track is used in the PV fit and the weight is above 0.5; `UsedInFitLoose=6`, the track is used in the PV fit and the weight is below 0.5; `CompatibilityDz=5` the track is not used in fit but is very close in `dz` to the PV (`dzsig` < 5 or `dz` < 300 um); `CompatibilityBTag=4`, the track is not compatible with the PV but it is close to the nearest jet axis starting from the PV (distance to jet axis < 700 um); `NotReconstructedPrimary=0`, the track is not associated to any PV and is compatible with the BeamSpot hence it is likely to be originating from an interaction for which we did not reconstruct the PV (beam spot compatibility: `dxysig` < 2 and `dxy` < 200 um); `OtherDeltaZ=1`, none of the above criteria is satisfied, hence the closest in dZ vertex is associated) |
 | `track_charge` | Float_t | Electric charge of the charged PF candidate |
 | `track_deltaR` | Float_t | Pseudoangular distance (∆R) between the charged PF candidate and the AK8 jet axis |
 | `track_detadeta` | Float_t | Track covariance matrix entry (eta, eta) |
@@ -227,8 +227,8 @@ The reconstructed jets are clustered using the anti-kT algorithm with R=0.8 from
 | `track_drminsv` | Float_t | Minimum pseudoangular distance ∆R between the associated SVs and the charged PF candidate |
 | `track_drsubjet1` | Float_t | Pseudoangular distance ∆R between the charged PF candidate and the first soft drop subjet |
 | `track_drsubjet2` | Float_t | Pseudoangular distance ∆R between the charged PF candidate and the second soft drop subjet  |
-| `track_dxy` | Float_t | Transverse (2D) impact paramater of the track, defined as the distance of closest approach of the track trajectory to the beam line in the transverse plane to the beam |
-| `track_dxysig` | Float_t | Transverse (2D) impact paramater significance of the track |
+| `track_dxy` | Float_t | Transverse (2D) impact parameter of the track, defined as the distance of closest approach of the track trajectory to the beam line in the transverse plane to the beam |
+| `track_dxysig` | Float_t | Transverse (2D) impact parameter significance of the track |
 | `track_dz` | Float_t | Longitudinal impact parameter, defined as the distance of closest approach of the track trajectory to the PV projected on to the z direction |
 | `track_dzsig` | Float_t | Longitudinal impact parameter significance of the track |
 | `track_erel` | Float_t | Energy of the charged PF candidate divided by the energy of the AK8 jet |
@@ -237,12 +237,12 @@ The reconstructed jets are clustered using the anti-kT algorithm with R=0.8 from
 | `track_isChargedHad` | Float_t | Boolean that is 1 if the charged PF candidate is classified as a charged hadron |
 | `track_isEl` | Float_t | Boolean that is 1 if the charged PF candidate is classified as an electron  |
 | `track_isMu` | Float_t | Boolean that is 1 if the charged PF candidate is classified as a muon |
-| `track_lostInnerHits` | Float_t | Integer with information related to inner silicon tracker hits for the track: `validHitInFirstPixelBarrelLayer=-1`, if the track has a valid hit in the first pixel barrel layer; `noLostInnerHits=0` if it does not have such hit because of geometrical or detector inefficiencies (i.e. the hit wasn't expected to be there); `oneLostHit=1`, if the track extrapolation towards the beamline crosses an active detector but no hit is found there; `moreLostHits=2` if there are at least two missing expected inner hits |
+| `track_lostInnerHits` | Float_t | Integer with information related to inner silicon tracker hits for the track: `validHitInFirstPixelBarrelLayer=-1`, if the track has a valid hit in the first pixel barrel layer; `noLostInnerHits=0` if it does not have such hit because of geometrical or detector inefficiencies (i.e. the hit wasn't expected to be there); `oneLostHit=1`, if the track extrapolation towards the beam line crosses an active detector but no hit is found there; `moreLostHits=2` if there are at least two missing expected inner hits |
 | `track_mass` | Float_t | Mass of the charged PF candidate |
-| `track_normchi2` | Float_t | Normalzied χ2 of the track fit |
-| `track_phirel` | Float_t | Azuimuthal angular distance ∆ϕ between the charged PF candidate and the AK8 jet axis |
+| `track_normchi2` | Float_t | Normalized χ2 of the track fit |
+| `track_phirel` | Float_t | Azimuthal angular distance ∆ϕ between the charged PF candidate and the AK8 jet axis |
 | `track_pt` | Float_t | Transverse momentum of the charged PF candidate |
-| `track_ptrel` | Float_t | Trasnverse momentum of the charged PF candidate divided by the transverse momentum of the AK8 jet |
+| `track_ptrel` | Float_t | Transverse momentum of the charged PF candidate divided by the transverse momentum of the AK8 jet |
 | `track_puppiw` | Float_t | Pileup per-particle identification (PUPPI) weight indicating whether the PF candidate is pileup-like (0) or not (1)  |
 | `track_quality` | Float_t | Track quality: `undefQuality=-1`; `loose=0`; `tight=1`; `highPurity=2`; `confirmed=3`, if track found by more than one iteration; `looseSetWithPV=5`; `highPuritySetWithPV=6`, `discarded=7` if a better track found; `qualitySize=8` |
 | `n_sv` | Int_t | Number of secondary vertices (SV) associated with the AK8 jet (∆R < 0.8) |
@@ -258,10 +258,10 @@ The reconstructed jets are clustered using the anti-kT algorithm with R=0.8 from
 | `sv_dxyerr` | Float_t | Transverse (2D) flight distance uncertainty of the SV |
 | `sv_dxysig` | Float_t | Transverse (2D) flight distance significance of the SV |
 | `sv_deltaR` | Float_t | Pseudoangular distance ∆R between the SV and the AK8 jet |
-| `sv_erel` | Float_t | Energy of the SV |
-| `sv_etarel` | Float_t | Pseudorapidity ∆η of the SV relative to the jet axis |
+| `sv_erel` | Float_t | Energy of the SV divided by the energy of the AK8 jet |
+| `sv_etarel` | Float_t | Pseudorapidity ∆η of the SV relative to the AK8 jet axis |
 | `sv_mass` | Float_t | Mass of the SV |
 | `sv_ntracks` | Float_t | Number of tracks associated with the SV |
 | `sv_phirel` | Float_t | Azimuthal angular distance ∆ϕ of the SV relative to the jet axis |
 | `sv_pt` | Float_t | Transverse momentum of the SV |
-| `sv_ptrel` | Float_t | Transverse momentum of the SV divided by the transvse momentum of the AK8 jet |
+| `sv_ptrel` | Float_t | Transverse momentum of the SV divided by the transverse momentum of the AK8 jet |
