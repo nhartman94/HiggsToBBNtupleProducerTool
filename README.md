@@ -10,7 +10,7 @@ Running the data processing uses `CMSSW_8_0_28`
 cmsrel CMSSW_8_0_28
 cd CMSSW_8_0_28/src/
 cmsenv
-git clone https://github.com/cms-legacydata-analyses/HiggsToBBNtupleProducerTool DeepNTuples -b opendata_80X
+git clone https://github.com/cms-opendata-analyses/HiggsToBBNtupleProducerTool DeepNTuples -b opendata_80X
 scram b -j 4
 # if using CMS resources (like CRAB, you can set it up after:)
 # voms-proxy-init -rfc -voms cms --valid 168:00
@@ -71,7 +71,7 @@ This step requires a more recent version of CMSSW.
 cmsrel CMSSW_10_4_0
 cd CMSSW_10_4_0/src/
 cmsenv
-wget https://raw.githubusercontent.com/cms-legacydata-analyses/HiggsToBBNtupleProducerToo/opendata_80X/NtupleAK8/scripts/convert-uproot-opendata.py
+wget https://raw.githubusercontent.com/cms-opendata-analyses/HiggsToBBNtupleProducerToo/opendata_80X/NtupleAK8/scripts/convert-uproot-opendata.py
 ```
 
 Then you can run
