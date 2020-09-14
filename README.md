@@ -97,7 +97,13 @@ The reconstructed jets are clustered using the anti-kT algorithm with R=0.8 from
 | `npv` | Float_t | Number of reconstructed primary vertices (PVs) |
 | `ntrueInt` | Float_t | True mean number of the poisson distribution for this event from which the number of interactions in each bunch crossing has been sampled |
 | `rho` | Float_t | Median density (in GeV/A) of pile-up contamination per event; computed from all PF candidates of the event |
-| `sample_isQCD` | Float_t | Boolean that is 1 if the simulated sample corresponds to QCD multijet production |
+| `sample_isQCD` | Int_t | Boolean that is 1 if the simulated sample corresponds to QCD multijet production |
+| `label_H_bb` | Int_t | Boolean that is 1 if a Higgs boson is matched and at least two b quarks are found within the AK8 jet |
+| `label_QCD_bb` | Int_t | Boolean that is 1 if no resonances are matched and at least two b quarks are found within the AK8 jet |
+| `label_QCD_b` | Int_t | Boolean that is 1 if no resonances are matched and only one b quark is found within the AK8 jet |
+| `label_QCD_cc` | Int_t | Boolean that is 1 if no resonances are matched and at least two c quarks are found within the AK8 jet |
+| `label_QCD_c` | Int_t | Boolean that is 1 if no resonances are matched and only one c quark is found within the AK8 jet |
+| `label_QCD_others` | Int_t | Boolean that is 1 if no resonances are matched and only one c quark is found within the AK8 jet |
 | `fj_doubleb` | Float_t | Double-b tagging discriminant based on a boosted decision tree calculated for the AK8 jet (see [CMS-BTV-16-002](http://cms-results.web.cern.ch/cms-results/public-results/publications/BTV-16-002/)) |
 | `fj_eta` | Float_t | Pseudorapidity η of the AK8 jet |
 | `fj_gen_eta` | Float_t | Pseudorapidity η of the generator-level, matched heavy particle: H, W, Z, top, etc. (default = -999) |
