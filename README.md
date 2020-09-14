@@ -103,7 +103,7 @@ The reconstructed jets are clustered using the anti-kT algorithm with R=0.8 from
 | `label_QCD_b` | Int_t | Boolean that is 1 if no resonances are matched and only one b quark is found within the AK8 jet |
 | `label_QCD_cc` | Int_t | Boolean that is 1 if no resonances are matched and at least two c quarks are found within the AK8 jet |
 | `label_QCD_c` | Int_t | Boolean that is 1 if no resonances are matched and only one c quark is found within the AK8 jet |
-| `label_QCD_others` | Int_t | Boolean that is 1 if no resonances are matched and only one c quark is found within the AK8 jet |
+| `label_QCD_others` | Int_t | Boolean that is 1 if no resonances are matched and no b or c quarks are found within the AK8 jet |
 | `fj_doubleb` | Float_t | Double-b tagging discriminant based on a boosted decision tree calculated for the AK8 jet (see [CMS-BTV-16-002](http://cms-results.web.cern.ch/cms-results/public-results/publications/BTV-16-002/)) |
 | `fj_eta` | Float_t | Pseudorapidity η of the AK8 jet |
 | `fj_gen_eta` | Float_t | Pseudorapidity η of the generator-level, matched heavy particle: H, W, Z, top, etc. (default = -999) |
