@@ -51,6 +51,10 @@ public:
     data.reset();
     return fill(jet, jetidx, jet_helper);
   }
+  bool fillBranches() {
+    data.reset();
+    return fill();
+  }
 
   // return tree data for reading
   const TreeData& treeData() const { return data; }
@@ -59,7 +63,8 @@ protected:
   // declare the data branches (name, type, default values)
   virtual void book() = 0;
   // fill the data branches to the tree
-  virtual bool fill(const pat::Jet &jet, size_t jetidx, const JetHelper &jet_helper) = 0;
+  virtual bool fill(const pat::Jet &jet, size_t jetidx, const JetHelper &jet_helper) { return false; }
+  virtual bool fill() { return false; } // We want to edit to be evt level, not jet level
 
 protected:
   std::string branchName_;

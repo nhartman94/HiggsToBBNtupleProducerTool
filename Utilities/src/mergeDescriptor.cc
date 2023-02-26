@@ -22,6 +22,7 @@
 
 #include "DeepNTuples/Utilities/interface/mergeDescriptor.h"
 
+#include "DeepNTuples/NtupleAK8/interface/EvtInfoFiller.h"
 #include "DeepNTuples/NtupleAK8/interface/JetInfoFillerAK8.h"
 #include "DeepNTuples/NtupleAK8/interface/FatJetInfoFiller.h"
 #include "DeepNTuples/NtupleAK8/interface/PFCandidateFiller.h"
@@ -138,11 +139,12 @@ std::vector<TChain* > mergeDescriptor::createChains(
     branchinfos.clear();
     entriesperchain=std::vector<size_t>(infiles.size(),0);
 
+    branchinfos.push_back(new EvtInfoFiller());
     branchinfos.push_back(new JetInfoFillerAK8());
-    branchinfos.push_back(new FatJetInfoFiller());
-    branchinfos.push_back(new PFCandidateFiller());
-    branchinfos.push_back(new TrackFiller());
-    branchinfos.push_back(new SVFiller());
+    // branchinfos.push_back(new FatJetInfoFiller());
+    // branchinfos.push_back(new PFCandidateFiller());
+    // branchinfos.push_back(new TrackFiller());
+    // branchinfos.push_back(new SVFiller());
 
     std::vector<TChain* > chains;
     std::vector<TreeWriter*> treewriters;

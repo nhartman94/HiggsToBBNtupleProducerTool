@@ -62,6 +62,21 @@ protected:
   std::vector<Type> value;
 };
 
+template<typename Type>
+class TreeMultiMultiVar : public AbstractTreeVar {
+public:
+  TreeMultiMultiVar(std::string name_)
+    : AbstractTreeVar(name_) { }
+//  void fill() {}
+  void fill(const Type var) { value.push_back(var); }
+  void set(const std::vector<Type>& vars) { value = vars; }
+  void reset() { value.clear(); }
+  const std::vector<Type>& get() { return value; }
+  void book(TreeWriter * tw) { tw->book(name.c_str(), value); }
+protected:
+  std::vector<std::vector<Type>> value;
+};
+
 
 class TreeData {
   using TypeMap = std::map<std::type_index, std::string>;
@@ -97,6 +112,18 @@ public:
     data[fullname] = new TreeMultiVar<Type>(fullname);
   }
 
+  template<typename Type>
+  void addMultiMulti(std::string name){
+    assert(isRead || !isBooked);
+    auto fullname = fullName(name);
+    if (data.find(fullname) != data.end()){
+      if (isRead) return; // ReadMode: the TreeVar has already been created; just return and call book() to set branch address later
+      throw std::invalid_argument("[TreeData::addMultiMulti] Variable w/ the same name has already been added: "+fullname);
+    }
+    data[fullname] = new TreeMultiMultiVar<Type>(fullname);
+  }
+
+
   template<typename Type, typename FillType>
   void fill(std::string name, const FillType var){
     auto fullname = fullName(name);
@@ -119,6 +146,17 @@ public:
       throw std::invalid_argument("[TreeData::fillMulti] Variable " + name + " is not booked!");
     }
   }
+  template<typename Type, typename FillType>
+  void fillMultiMulti(std::string name, const FillType var){
+    auto fullname = fullName(name);
+    try {
+      auto *tv=dynamic_cast<TreeMultiMultiVar<Type>*>(data.at(fullname));
+      if (!tv) throw std::invalid_argument("[TreeData::fillMultiMulti] Filling a different type than registered: "+fullname);
+      tv->fill(var);
+    } catch (const std::out_of_range& e){
+      throw std::invalid_argument("[TreeData::fillMultiMulti] Variable " + name + " is not booked!");
+    }
+  }
 
   template<typename Type>
   void set(std::string name, const Type var) { fill<Type, Type>(name, var); }
@@ -131,6 +169,17 @@ public:
       tv->set(vec);
     } catch (const std::out_of_range& e){
       throw std::invalid_argument("[TreeData::setMulti] Variable " + name + " is not booked!");
+    }
+  }
+  template<typename Type>
+  void setMultiMulti(std::string name, const std::vector<std::vector<Type>> &vec){
+    auto fullname = fullName(name);
+    try {
+      auto *tv=dynamic_cast<TreeMultiMultiVar<Type>*>(data.at(fullname));
+      if (!tv) throw std::invalid_argument("[TreeData::setMultiMulti] Filling a different type than registered: "+fullname);
+      tv->set(vec);
+    } catch (const std::out_of_range& e){
+      throw std::invalid_argument("[TreeData::setMultiMulti] Variable " + name + " is not booked!");
     }
   }
 
@@ -158,6 +207,17 @@ public:
     }
   }
 
+  template<typename Type>
+  const std::vector<Type>& getMultiMulti(std::string name) const {
+    auto fullname = fullName(name);
+    try {
+      auto *tv=dynamic_cast<TreeMultiMultiVar<Type>*>(data.at(fullname));
+      if (!tv) throw std::invalid_argument("[TreeData::getMultiMulti] Wrong type: "+fullname);
+      return tv->get();
+    } catch (const std::out_of_range& e){
+      throw std::invalid_argument("[TreeData::getMultiMulti] Variable " + name + " does not exist!");
+    }
+  }
 
   void book(TreeWriter *tw){
     for(const auto &d : data) d.second->book(tw);

@@ -8,9 +8,6 @@
 #ifndef NTUPLEAK8_INTERFACE_JETINFOFILLERAK8_H_
 #define NTUPLEAK8_INTERFACE_JETINFOFILLERAK8_H_
 
-#include "DataFormats/VertexReco/interface/Vertex.h"
-#include "SimDataFormats/PileupSummaryInfo/interface/PileupSummaryInfo.h"
-
 #include "DeepNTuples/NtupleCommons/interface/NtupleBase.h"
 #include "DeepNTuples/BTagHelpers/interface/FlavorDefinition.h"
 
@@ -32,25 +29,19 @@ protected:
   // declare the data branches (name, type, default values)
   virtual void book() override;
   // fill the branches
-  virtual bool fill(const pat::Jet &jet, size_t jetidx, const JetHelper &jet_helper) override;
+  // virtual bool fill(const pat::Jet &jet, size_t jetidx, const JetHelper &jet_helper) override;
+  virtual bool fill() override;
 
 private:
+  edm::EDGetTokenT<edm::View<pat::Jet>> jetToken_;
+  edm::Handle<edm::View<pat::Jet>> jets;
+
   FlavorDefinition flavorDef;
 
   double minPt_ = 0;
   double maxPt_ = 0;
   double maxAbsEta_ = 0;
   std::vector<std::string> btag_discriminators_;
-
-  edm::EDGetTokenT<reco::VertexCollection> vtxToken_;
-  edm::EDGetTokenT<std::vector<PileupSummaryInfo>> puToken_;
-  edm::EDGetTokenT<double> rhoToken_;
-
-  edm::Handle<reco::VertexCollection> vertices;
-  edm::Handle<std::vector<PileupSummaryInfo>> puInfo;
-  edm::Handle<double> rhoInfo;
-
-  unsigned event_ = 0;
 
 //  edm::EDGetTokenT<edm::Association<reco::GenJetCollection>> genJetMatchReclusterToken_;
 //  edm::EDGetTokenT<edm::Association<reco::GenJetCollection>> genJetMatchWithNuToken_;

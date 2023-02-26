@@ -16,6 +16,7 @@
 
 #include "DeepNTuples/NtupleCommons/interface/TreeWriter.h"
 
+#include "DeepNTuples/NtupleAK8/interface/EvtInfoFiller.h"
 #include "DeepNTuples/NtupleAK8/interface/JetInfoFillerAK8.h"
 #include "DeepNTuples/NtupleAK8/interface/FatJetInfoFiller.h"
 #include "DeepNTuples/NtupleAK8/interface/PFCandidateFiller.h"
@@ -38,7 +39,7 @@ private:
   virtual void analyze(const edm::Event&, const edm::EventSetup&) override;
   virtual void endJob() override;
 
-  edm::EDGetTokenT<edm::View<pat::Jet>> jetToken_;
+  //edm::EDGetTokenT<edm::View<pat::Jet>> jetToken_;
 
   edm::Service<TFileService> fs;
   TreeWriter *treeWriter = nullptr;
@@ -50,29 +51,32 @@ private:
   std::vector<NtupleBase*> modules_;
 };
 
-DeepNtuplizerAK8::DeepNtuplizerAK8(const edm::ParameterSet& iConfig):
-    jetToken_(consumes<edm::View<pat::Jet> >(iConfig.getParameter<edm::InputTag>("jets")))
-{
+DeepNtuplizerAK8::DeepNtuplizerAK8(const edm::ParameterSet& iConfig) {
 
   // read configuration parameters
   const double jetR = iConfig.getParameter<double>("jetR");
   const double candidatePtMin = iConfig.getParameter<double>("candidatePtMin");
 
+  std::cout << "jetR = " << jetR << std::endl;
+
   // register modules
+  EvtInfoFiller *evtinfo = new EvtInfoFiller("", jetR);
+  addModule(evtinfo);
+
   JetInfoFillerAK8 *jetinfo = new JetInfoFillerAK8("", jetR);
   addModule(jetinfo);
 
-  FatJetInfoFiller *fjinfo = new FatJetInfoFiller("", jetR);
-  addModule(fjinfo);
+  // FatJetInfoFiller *fjinfo = new FatJetInfoFiller("", jetR);
+  // addModule(fjinfo);
 
-  PFCandidateFiller *pfcands = new PFCandidateFiller("", jetR, candidatePtMin);
-  addModule(pfcands);
+  // PFCandidateFiller *pfcands = new PFCandidateFiller("", jetR, candidatePtMin);
+  // addModule(pfcands);
 
-  TrackFiller *tracks = new TrackFiller("", jetR, candidatePtMin);
-  addModule(tracks);
+  // TrackFiller *tracks = new TrackFiller("", jetR, candidatePtMin);
+  // addModule(tracks);
 
-  SVFiller *sv = new SVFiller("", jetR);
-  addModule(sv);
+  // SVFiller *sv = new SVFiller("", jetR);
+  // addModule(sv);
 
   // read config and init modules
   for(auto& m: modules_)
@@ -94,26 +98,29 @@ void DeepNtuplizerAK8::analyze(const edm::Event& iEvent, const edm::EventSetup& 
     m->readEvent(iEvent, iSetup);
   }
 
-  edm::Handle<edm::View<pat::Jet>> jets;
-  iEvent.getByToken(jetToken_, jets);
+  bool write_ = true;
 
-  for (unsigned idx=0; idx<jets->size(); ++idx){
-    bool write_ = true;
-
-    const auto jet = jets->at(idx).correctedJet("Uncorrected"); // undo the JECs
-    JetHelper jet_helper(&jet);
-
-    for (auto *m : modules_){
-      if (!m->fillBranches(jet, idx, jet_helper)){
-        write_ = false;
-        break;
-      }
-    }
-
-    if (write_) {
-      treeWriter->fill();
+  for (auto *m : modules_){
+    if (!m->fillBranches()){
+      std::cout << "Setting write_ to false\n";
+      write_ = false;
+      break;
     }
   }
+
+  if (write_) {
+    treeWriter->fill();
+  }
+
+  // edm::Handle<edm::View<pat::Jet>> jets;
+  // iEvent.getByToken(jetToken_, jets);
+
+  // const auto jet = jets->at(idx).correctedJet("Uncorrected"); // undo the JECs
+  // JetHelper jet_helper(&jet);
+
+  // for (unsigned idx=0; idx<jets->size(); ++idx){
+    
+  // }
 
 }
 
