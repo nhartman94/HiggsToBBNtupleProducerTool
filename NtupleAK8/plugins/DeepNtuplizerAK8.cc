@@ -72,8 +72,8 @@ DeepNtuplizerAK8::DeepNtuplizerAK8(const edm::ParameterSet& iConfig) {
   // PFCandidateFiller *pfcands = new PFCandidateFiller("", jetR, candidatePtMin);
   // addModule(pfcands);
 
-  // TrackFiller *tracks = new TrackFiller("", jetR, candidatePtMin);
-  // addModule(tracks);
+  TrackFiller *tracks = new TrackFiller("", jetR, candidatePtMin);
+  addModule(tracks);
 
   // SVFiller *sv = new SVFiller("", jetR);
   // addModule(sv);
@@ -111,16 +111,6 @@ void DeepNtuplizerAK8::analyze(const edm::Event& iEvent, const edm::EventSetup& 
   if (write_) {
     treeWriter->fill();
   }
-
-  // edm::Handle<edm::View<pat::Jet>> jets;
-  // iEvent.getByToken(jetToken_, jets);
-
-  // const auto jet = jets->at(idx).correctedJet("Uncorrected"); // undo the JECs
-  // JetHelper jet_helper(&jet);
-
-  // for (unsigned idx=0; idx<jets->size(); ++idx){
-    
-  // }
 
 }
 
