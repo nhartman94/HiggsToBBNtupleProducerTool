@@ -141,10 +141,10 @@ std::vector<TChain* > mergeDescriptor::createChains(
 
     branchinfos.push_back(new EvtInfoFiller());
     branchinfos.push_back(new JetInfoFillerAK8());
-    // branchinfos.push_back(new FatJetInfoFiller());
-    // branchinfos.push_back(new PFCandidateFiller());
+    branchinfos.push_back(new FatJetInfoFiller());
+    branchinfos.push_back(new PFCandidateFiller());
     branchinfos.push_back(new TrackFiller());
-    // branchinfos.push_back(new SVFiller());
+    branchinfos.push_back(new SVFiller());
 
     std::vector<TChain* > chains;
     std::vector<TreeWriter*> treewriters;

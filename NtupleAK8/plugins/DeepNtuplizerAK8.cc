@@ -66,17 +66,17 @@ DeepNtuplizerAK8::DeepNtuplizerAK8(const edm::ParameterSet& iConfig) {
   JetInfoFillerAK8 *jetinfo = new JetInfoFillerAK8("", jetR);
   addModule(jetinfo);
 
-  // FatJetInfoFiller *fjinfo = new FatJetInfoFiller("", jetR);
-  // addModule(fjinfo);
+  FatJetInfoFiller *fjinfo = new FatJetInfoFiller("", jetR);
+  addModule(fjinfo);
 
-  // PFCandidateFiller *pfcands = new PFCandidateFiller("", jetR, candidatePtMin);
-  // addModule(pfcands);
+  PFCandidateFiller *pfcands = new PFCandidateFiller("", jetR, candidatePtMin);
+  addModule(pfcands);
 
-  TrackFiller *tracks = new TrackFiller("", jetR, candidatePtMin);
-  addModule(tracks);
+  //TrackFiller *tracks = new TrackFiller("", jetR, candidatePtMin);
+  //addModule(tracks);
 
-  // SVFiller *sv = new SVFiller("", jetR);
-  // addModule(sv);
+  SVFiller *sv = new SVFiller("", jetR);
+  addModule(sv);
 
   // read config and init modules
   for(auto& m: modules_)

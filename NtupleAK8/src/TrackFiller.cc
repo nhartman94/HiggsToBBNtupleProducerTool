@@ -114,7 +114,8 @@ bool TrackFiller::fill() {
     JetHelper jet_helper(&jet);
 
     const float jet_uncorr_pt=jet.correctedJet("Uncorrected").pt();
-
+    chargedPFCands = {};
+    sortedcharged = {};
     unsigned int i = 0;
     for (const auto * pfcand : jet_helper.getJetConstituents()){
       if (!pfcand) continue;

@@ -33,9 +33,11 @@ protected:
   // declare the data branches (name, type, default values)
   virtual void book() override;
   // fill the branches
-  virtual bool fill(const pat::Jet &jet, size_t jetidx, const JetHelper &jet_helper) override;
+  // virtual bool fill(const pat::Jet &jet, size_t jetidx, const JetHelper &jet_helper) override;
+  virtual bool fill() override;
 
 private:
+
   FatJetMatching fjmatch_;
   std::vector<FatJetMatching::FatJetFlavor> keepFlavors_;
   bool isQCDSample_ = false;
@@ -44,6 +46,10 @@ private:
 
   edm::EDGetTokenT<reco::GenParticleCollection> genParticlesToken_;
   edm::Handle<reco::GenParticleCollection> genParticlesHandle;
+
+
+  edm::EDGetTokenT<edm::View<pat::Jet>> jetToken_;
+  edm::Handle<edm::View<pat::Jet>> jets;
 
 
 };

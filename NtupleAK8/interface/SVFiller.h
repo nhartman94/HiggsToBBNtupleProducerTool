@@ -29,9 +29,13 @@ protected:
   // declare the data branches (name, type, default values)
   virtual void book() override;
   // fill the branches
-  virtual bool fill(const pat::Jet &jet, size_t jetidx, const JetHelper &jet_helper) override;
-
+  //virtual bool fill(const pat::Jet &jet, size_t jetidx, const JetHelper &jet_helper) override;
+  virtual bool fill() override;
 private:
+
+  edm::EDGetTokenT<edm::View<pat::Jet>> jetToken_;
+  edm::Handle<edm::View<pat::Jet>> jets;
+
   edm::EDGetTokenT<reco::VertexCollection> vtxToken_;
   edm::EDGetTokenT<reco::VertexCompositePtrCandidateCollection> svToken_;
 
